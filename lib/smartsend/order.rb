@@ -11,9 +11,12 @@ class Smartsend::Order
   def save!
     response = Smartsend::Client.new.post('order', self.serialize)
 
-    update_label_url_tracking_codes(response)
-
-    self
+    if response.success?
+      update_label_url_tracking_codes(response)
+      self
+    else
+      response
+    end
   end
 
   def update_label_url_tracking_codes(response)

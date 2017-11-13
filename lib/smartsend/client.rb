@@ -5,12 +5,40 @@ class Smartsend::Client
   BASE_URL = 'http://smartsend-prod.apigee.net/v7/booking'.freeze
 
   def post(path, params)
-    response = http.post("#{BASE_URL}/#{path}", json: params)
-    response = JSON.parse(response)
+    request do
+      http.post("#{BASE_URL}/#{path}", json: params)
+    end
+  end
 
-    Rails.logger.debug(response) if defined?(Rails)
+  def request
+    response = yield
+    if /^2/ === response.code.to_s
+      Response.new(JSON.parse(response)).successful!
+    else
+      Response.new(response).failed!
+    end
+  end
 
-    response
+  class Response < SimpleDelegator
+
+    def successful!
+      @success = true
+      self
+    end
+
+    def failed!
+      @success = false
+      self
+    end
+
+    def success?
+      @success
+    end
+
+    def failed?
+      !@success
+    end
+
   end
 
   private
