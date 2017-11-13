@@ -1,11 +1,11 @@
 class Smartsend::Agent < Smartsend::Address
-  attr_accessor :carrier
+  attr_accessor :type
 
   def serialize
     super.merge(
       id: @id,
       agentno: @id,
-      agenttype: @carrier
+      agenttype: @type
     )
   end
 

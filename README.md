@@ -1,6 +1,6 @@
 # README
 
-This is a ruby wrapper for the Smartsend.io api.
+A ruby wrapper for the Smartsend.io api.
 
 Before beginning you need a Smartsend account.
 
@@ -29,6 +29,8 @@ Smartsend.configure(
 This creates a label.
 
 ```ruby
+
+# initalize a new order
 order = Smartsend::Order.new(
   order_number: "AC12345789",
   carrier: "postdanmark", # postdanmark/gls/bring
@@ -36,9 +38,12 @@ order = Smartsend::Order.new(
   return: false,
   total_price: 199.75,
   shipping_price: 49,
-  currency: "DKK"
+  currency: "DKK",
+  sms_notification: "12345678",
+  email_notification: "contact@smartsend.io"
 )
 
+# set the receiver of the order
 order.receiver = Smartsend::Receiver.new(
   id: "123456", # your internal customer id
   company: "Smart Send",
@@ -50,11 +55,10 @@ order.receiver = Smartsend::Receiver.new(
   city: "Copenhagen",
   country: "DK",
   phone: "12345678",
-  mail: "contact@smartsend.io",
-  sms_notification: "12345678",
-  email_notification: "contact@smartsend.io"
+  mail: "contact@smartsend.io"
 )
 
+# set the receiver of the order
 order.sender = Smartsend::Sender.new(
   company: "Smart Send",
   name1: "Henrik Hansen",
@@ -64,11 +68,11 @@ order.sender = Smartsend::Sender.new(
   zip: "2100",
   city: "Copenhagen",
   country: "DK",
-  sms: "12345678",
+  phone: "12345678",
   mail: "contact@smartsend.io"
 )
 
-# you can ship to a droppoint by defining an agent
+# you can ship to a droppoint by seting an agent
 order.agent = Smartsend::Agent.new(
   id: "7224", # droppoint id
   type: "PDK", # droppoint provider
@@ -84,6 +88,7 @@ order.agent = Smartsend::Agent.new(
   mail: "contact@smartsend.io"
 )
 
+# add one or more parcels/fulfillments to the order
 parcel = Smartsend::Parcel.new(
   shipped_at: DateTime.now,
   reference: "123456789", # your internal parcel id
@@ -99,12 +104,13 @@ parcel = Smartsend::Parcel.new(
   ]
 )
 
+# add items to the parcel
 parcel_item = Smartsend::ParcelItem.new(
   sku: "ABC123",
   title: "ABC123",
   quantity: 2,
-  unitweight: 1.25,
-  unitprice: 144.5,
+  unit_weight: 1.25,
+  unit_price: 144.5,
   currency: "DKK"
 )
 

@@ -40,7 +40,7 @@ class AddressesTest < Minitest::Test
   end
 
   def test_agent_serializing
-    receiver = Smartsend::Agent.new(address.merge(carrier: 'PDK'))
+    receiver = Smartsend::Agent.new(address.merge(type: 'PDK'))
 
     assert_equal({
       "id": 1,
