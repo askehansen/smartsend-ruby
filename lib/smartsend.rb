@@ -1,13 +1,16 @@
 module Smartsend
 
+  @@api_key = nil
+  @@email = nil
+  @@license = nil
+  @@cms_system = nil
+  @@cms_version = nil
+  @@test_mode = false
+
   def self.configure(args={})
     args.each do |k, v|
       class_variable_set "@@#{k}", v
     end
-  end
-
-  def self.hi
-    "hi"
   end
 
   def self.api_key
@@ -22,16 +25,16 @@ module Smartsend
     @@license
   end
 
-  def self.cmssystem
-    @@cmsversion
+  def self.cms_system
+    @@cms_system
   end
 
-  def self.cmsversion
-    @@cmsversion
+  def self.cms_version
+    @@cms_version
   end
 
-  def self.appversion
-    @@appversion
+  def self.app_version
+    Smartsend::VERSION
   end
 
   def self.test_mode
@@ -44,6 +47,9 @@ module Smartsend
 
 
   class TooManyOrdersError < StandardError
+  end
+
+  class MissingConfigError < StandardError
   end
 
 

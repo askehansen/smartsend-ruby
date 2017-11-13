@@ -1,5 +1,5 @@
 class Smartsend::Order
-  attr_accessor :order_number, :carrier, :method, :return, :total_price, :shipping_price, :currency,
+  attr_accessor :id, :label_url, :order_number, :carrier, :method, :return, :total_price, :shipping_price, :currency,
     :sender, :receiver, :agent, :parcels, :sms_notification, :email_notification
 
   def initialize(args={})
@@ -9,8 +9,25 @@ class Smartsend::Order
   end
 
   def save!
-    Smartsend::Client.new.post('/order', self.serialize)
+    response = Smartsend::Client.new.post('order', self.serialize)
+
+    update_label_url_tracking_codes(response)
+
+    self
   end
+
+  def update_label_url_tracking_codes(response)
+    @id = response['id']
+    @label_url = response['link']
+
+    response['parcels'].each do |parcel_response|
+      if parcel = @parcels.select { |x| x.reference.to_s == parcel_response['reference'].to_s }.first
+        parcel.tracking_code = parcel_response['tracecode']
+        parcel.tracking_url = parcel_response['tracelink']
+      end
+    end
+  end
+
 
   def serialize
     {
@@ -26,7 +43,7 @@ class Smartsend::Order
       sender: @sender&.serialize,
       receiver: @receiver&.serialize,
       agent: @agent&.serialize,
-      parcels: @parcels.to_a.each(&:serialize),
+      parcels: @parcels.to_a.map(&:serialize),
       service: service.serialize
     }
   end

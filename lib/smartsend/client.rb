@@ -2,10 +2,15 @@ require 'http'
 
 class Smartsend::Client
 
-  BASE_URL = 'https://smartsend-prod.apigee.net/v7/booking'.freeze
+  BASE_URL = 'http://smartsend-prod.apigee.net/v7/booking'.freeze
 
   def post(path, params)
-    http.post(path, json: params)
+    response = http.post("#{BASE_URL}/#{path}", json: params)
+    response = JSON.parse(response)
+
+    Rails.logger.debug(response) if defined?(Rails)
+
+    response
   end
 
   private
@@ -19,9 +24,9 @@ class Smartsend::Client
       apikey: Smartsend.api_key,
       smartsendmail: Smartsend.email,
       smartsendlicence: Smartsend.license,
-      cmssystem: Smartsend.cmssystem,
-      cmsversion: Smartsend.cmsversion,
-      appversion: Smartsend.appversion,
+      cmssystem: Smartsend.cms_system,
+      cmsversion: Smartsend.cms_version,
+      appversion: Smartsend.app_version,
       test: Smartsend.test?
     )
   end

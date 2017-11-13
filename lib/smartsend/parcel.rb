@@ -1,5 +1,5 @@
 class Smartsend::Parcel
-  attr_accessor :shipped_at, :reference, :weight, :height, :width, :length, :size, :freetext_lines, :items
+  attr_accessor :id, :tracking_code, :tracking_url, :shipped_at, :reference, :weight, :height, :width, :length, :size, :freetext_lines, :items
 
   def initialize(args={})
     args.each do |k, v|
