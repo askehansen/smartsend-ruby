@@ -72,7 +72,7 @@ order.sender = Smartsend::Sender.new(
   mail: "contact@smartsend.io"
 )
 
-# you can ship to a droppoint by setiing an agent
+# you can ship to a droppoint by setting an agent
 order.agent = Smartsend::Agent.new(
   id: "7224", # droppoint id
   type: "PDK", # droppoint provider
