@@ -12,6 +12,9 @@ class Smartsend::Client
 
   def request
     response = yield
+
+    Rails.logger.debug(response.to_s) if defined?(Rails)
+
     if /^2/ === response.code.to_s
       Response.new(JSON.parse(response)).successful!
     else
