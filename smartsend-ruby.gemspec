@@ -7,10 +7,10 @@ Gem::Specification.new do |s|
   s.version     = Smartsend::VERSION
   s.date        = '2017-11-13'
   s.summary     = "Smartsend.io api client"
-  s.description = "Create orders in smartsend for smartsend"
+  s.description = "Create orders in smartsend"
   s.authors     = ["Aske Hansen"]
   s.email       = 'aske@deeco.dk'
-  s.homepage    = 'https://github.com/askehansen/smartsend-ruby'
+  s.homepage    = 'https://github.com/smartsendio/smartsend-ruby'
   s.license     = 'MIT'
 
   s.files         = `git ls-files`.split("\n")
