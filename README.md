@@ -10,9 +10,8 @@ Before beginning you need a Smartsend account.
 gem install 'smartsend-ruby'
 ```
 
-## Usage
 
-### Configuring the client
+## Configuration
 
 ```ruby
 Smartsend.configure(
@@ -24,16 +23,18 @@ Smartsend.configure(
 )
 ```
 
+## Usage
+
 ### Creating an order
 
 This creates a label.
 
 ```ruby
-
 # initalize a new order
 order = Smartsend::Order.new(
+  id: "123123123", # your internal order id
   order_number: "AC12345789",
-  carrier: "postdanmark", # postdanmark/gls/bring
+  carrier: "postnord", # postnord/gls/bring
   method: "private",
   return: false,
   total_price: 199.75,
@@ -58,8 +59,9 @@ order.receiver = Smartsend::Receiver.new(
   mail: "contact@smartsend.io"
 )
 
-# set the receiver of the order
+# optionally set the sender of the order
 order.sender = Smartsend::Sender.new(
+  id: "123456",
   company: "Smart Send",
   name1: "Henrik Hansen",
   name2: "C/O Vivian Hansen",
@@ -72,9 +74,9 @@ order.sender = Smartsend::Sender.new(
   mail: "contact@smartsend.io"
 )
 
-# you can ship to a droppoint by seting an agent
+# optionally ship to a droppoint by setting an agent
 order.agent = Smartsend::Agent.new(
-  id: "7224", # droppoint id
+  id: "2103", # droppoint id
   type: "PDK", # droppoint provider
   company: "Smart Send",
   name1: "Henrik Hansen",
@@ -114,39 +116,59 @@ parcel_item = Smartsend::ParcelItem.new(
   currency: "DKK"
 )
 
-parcel.items = [parcel_item]
-order.parcels = [parcel]
+parcel.items << parcel_item
+order.parcels << parcel
 
 # send the order to Smartsend.io
 order.save!
 ```
 
-After saving an order it is updated with a url for the label pdf and tracking codes for each parcel.
+After saving, the order it is updated with a url for the label pdf and tracking codes for each parcel.
 
 ```ruby
 order.label_url
-  => 'https://www.pacsoftonline.com/...'
+  => 'http://v70.api.smartsend.dk/...'
 
 order.parcels.first.tracking_code
   => '1234...'
 
 order.parcels.first.tracking_url
-  => 'https://...'
+  => 'https://tracking.postnord.com/...'
 ```
 
 ### Creating orders in batch
 
 You can create up to 10 orders in batch.
 
-```ruby
-order1 = Smartsend::Order.new(...)
-order2 = Smartsend::Order.new(...)
+This updates all orders with a label_url and also gives you a labels_url with the combined labels
 
-orders = Smartsend::Orders.new(order1, order2)
+```ruby
+
+orders = Smartsend::Orders.new
+orders << Smartsend::Order.new(...)
+orders << Smartsend::Order.new(...)
 
 # send the orders to Smartsend.io
 orders.save_all!
 
+orders.labels_url
+  => 'http://v70.api.smartsend.dk/...'
+
 orders.first.label_url
-  => 'https://www.pacsoftonline.com/...'
+  => 'http://v70.api.smartsend.dk/...'
+```
+
+### Using multiple accounts
+
+If your system requires multiple accounts you can pass an account instance when saving orders.
+
+```ruby
+order = Smartsend::Order.new(...)
+
+account = Smartsend::Account.new(
+  email: 'smartsend-username',
+  license: 'smartsend-license-key'
+)
+
+order.save!(account: account)
 ```

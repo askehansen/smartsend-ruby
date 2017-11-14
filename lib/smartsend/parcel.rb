@@ -5,6 +5,8 @@ class Smartsend::Parcel
     args.each do |k, v|
       instance_variable_set "@#{k}", v
     end
+
+    @items ||= []
   end
 
   def serialize
@@ -16,7 +18,7 @@ class Smartsend::Parcel
       :width     => @width,
       :length    => @length,
       :size      => @size,
-      :items     => @items.to_a.map(&:serialize)
+      :items     => @items.map(&:serialize)
     }
 
     freetext_lines.to_a.each_with_index do |line, i|

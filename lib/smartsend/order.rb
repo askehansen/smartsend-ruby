@@ -6,10 +6,12 @@ class Smartsend::Order
     args.each do |k, v|
       instance_variable_set "@#{k}", v
     end
+
+    @parcels ||= []
   end
 
-  def save!
-    response = Smartsend::Client.new.post('order', self.serialize)
+  def save!(account: nil)
+    response = Smartsend::Client.new(account).post('order', self.serialize)
 
     if response.success?
       update_label_url_tracking_codes(response)
@@ -20,8 +22,7 @@ class Smartsend::Order
   end
 
   def update_label_url_tracking_codes(response)
-    @id = response['id']
-    @label_url = response['link']
+    @label_url = response['pdflink']
 
     response['parcels'].each do |parcel_response|
       if parcel = @parcels.select { |x| x.reference.to_s == parcel_response['reference'].to_s }.first
@@ -35,6 +36,7 @@ class Smartsend::Order
   def serialize
     {
       orderno: @order_number,
+      reference: @id,
       carrier: @carrier,
       method: @method,
       return: @return,
@@ -46,7 +48,7 @@ class Smartsend::Order
       sender: @sender&.serialize,
       receiver: @receiver&.serialize,
       agent: @agent&.serialize,
-      parcels: @parcels.to_a.map(&:serialize),
+      parcels: @parcels.map(&:serialize),
       service: service.serialize
     }
   end

@@ -8,13 +8,7 @@ class SerivceTest < Minitest::Test
 
     assert_equal({
     "notemail": "contact@smartsend.io",
-    "notesms": "12345678",
-    "prenote": true,
-    "prenote_from": "contact@smartsend.io",
-    "prenote_to": "contact@smartsend.io",
-    "prenote_message": "Your order is now on the way.",
-    "flex": "string",
-    "waybillid": "string"
+    "notesms": "12345678"
   }, service.serialize)
   end
 

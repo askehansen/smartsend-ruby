@@ -25,6 +25,7 @@ class OrdersTest < Minitest::Test
   def params
     {
       orderno: 'AC12345789',
+      reference: '1234567',
       carrier: 'postdanmark',
       method: 'private',
       return: false,
@@ -37,12 +38,13 @@ class OrdersTest < Minitest::Test
       receiver: nil,
       agent: nil,
       parcels: [],
-      service: {:notemail=>"contact@smartsend.io", :notesms=>"12345678", :prenote=>true, :prenote_from=>"contact@smartsend.io", :prenote_to=>"contact@smartsend.io", :prenote_message=>"Your order is now on the way.", :flex=>"string", :waybillid=>"string"}
+      service: { :notemail=>"contact@smartsend.io", :notesms=>"12345678" }
     }
   end
 
   def order
     Smartsend::Order.new(
+      :id           => "1234567",
       :order_number => "AC12345789",
       :carrier      => "postdanmark",
       :method       => "private",

@@ -1,5 +1,5 @@
 class Smartsend::Sender < Smartsend::Address
   def serialize
-    super.merge(senderid: nil)
+    super.merge(senderid: @id)
   end
 end

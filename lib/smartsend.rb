@@ -13,6 +13,10 @@ module Smartsend
     end
   end
 
+  def self.account
+    Smartsend::Account.new(email: @@email, license: @@license)
+  end
+
   def self.api_key
     @@api_key
   end
@@ -52,16 +56,20 @@ module Smartsend
   class MissingConfigError < StandardError
   end
 
+  class AuthorizationError < StandardError
+  end
 
 end
 
-require 'smartsend/order'
-require 'smartsend/orders'
-require 'smartsend/address'
-require 'smartsend/receiver'
-require 'smartsend/sender'
-require 'smartsend/agent'
-require 'smartsend/service'
-require 'smartsend/parcel'
-require 'smartsend/parcel_item'
-require 'smartsend/client'
+require_relative 'smartsend/order'
+require_relative 'smartsend/orders'
+require_relative 'smartsend/address'
+require_relative 'smartsend/receiver'
+require_relative 'smartsend/sender'
+require_relative 'smartsend/agent'
+require_relative 'smartsend/service'
+require_relative 'smartsend/parcel'
+require_relative 'smartsend/parcel_item'
+require_relative 'smartsend/client'
+require_relative 'smartsend/account'
+require_relative 'smartsend/version'

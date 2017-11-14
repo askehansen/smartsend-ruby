@@ -4,6 +4,10 @@ class Smartsend::Client
 
   BASE_URL = 'http://smartsend-prod.apigee.net/v7/booking'.freeze
 
+  def initialize(account=nil)
+    @account = account || Smartsend.account
+  end
+
   def post(path, params)
     request do
       http.post("#{BASE_URL}/#{path}", json: params)
@@ -15,8 +19,11 @@ class Smartsend::Client
 
     Rails.logger.debug(response.to_s) if defined?(Rails)
 
-    if /^2/ === response.code.to_s
+    case response.code.to_s
+    when '200'
       Response.new(JSON.parse(response)).successful!
+    when '401'
+      raise Smartsend::AuthorizationError, 'Unable to authorize'
     else
       Response.new(response).failed!
     end
@@ -48,13 +55,13 @@ class Smartsend::Client
 
   def http
     raise Smartsend::MissingConfigError, 'Missing api_key' if Smartsend.api_key.nil?
-    raise Smartsend::MissingConfigError, 'Missing email' if Smartsend.email.nil?
-    raise Smartsend::MissingConfigError, 'Missing license' if Smartsend.license.nil?
+    raise Smartsend::MissingConfigError, 'Missing email'   if @account.email.nil?
+    raise Smartsend::MissingConfigError, 'Missing license' if @account.license.nil?
 
     HTTP.headers(
       apikey: Smartsend.api_key,
-      smartsendmail: Smartsend.email,
-      smartsendlicence: Smartsend.license,
+      smartsendmail: @account.email,
+      smartsendlicence: @account.license,
       cmssystem: Smartsend.cms_system,
       cmsversion: Smartsend.cms_version,
       appversion: Smartsend.app_version,

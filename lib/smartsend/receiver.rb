@@ -1,5 +1,5 @@
 class Smartsend::Receiver < Smartsend::Address
   def serialize
-    super.merge(reciverid: @id)
+    super.merge(receiverid: @id)
   end
 end

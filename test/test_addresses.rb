@@ -7,7 +7,7 @@ class AddressesTest < Minitest::Test
     sender = Smartsend::Sender.new(address)
 
     assert_equal({
-      "senderid": nil,
+      "senderid": 1,
       "company": "Smart Send",
       "name1": "Henrik Hansen",
       "name2": "C/O Vivian Hansen",
@@ -25,7 +25,7 @@ class AddressesTest < Minitest::Test
     receiver = Smartsend::Receiver.new(address)
 
     assert_equal({
-      "reciverid": 1,
+      "receiverid": 1,
       "company": "Smart Send",
       "name1": "Henrik Hansen",
       "name2": "C/O Vivian Hansen",
