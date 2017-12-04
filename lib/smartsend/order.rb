@@ -11,7 +11,7 @@ class Smartsend::Order
   end
 
   def save!(account: nil)
-    response = Smartsend::Client.new(account).post('order', self.serialize)
+    response = Smartsend::Client.new(account).post('booking/order', self.serialize)
 
     if response.success?
       update_label_url_tracking_codes(response)

@@ -2,7 +2,7 @@ require 'http'
 
 class Smartsend::Client
 
-  BASE_URL = 'http://smartsend-prod.apigee.net/v7/booking'.freeze
+  BASE_URL = 'http://smartsend-prod.apigee.net/v7'.freeze
 
   def initialize(account=nil)
     @account = account || Smartsend.account
@@ -12,6 +12,16 @@ class Smartsend::Client
     request do
       http.post("#{BASE_URL}/#{path}", json: params)
     end
+  end
+
+  def get(path)
+    request do
+      http.get("#{BASE_URL}/#{path}")
+    end
+  end
+
+  def get_plain(path)
+    http.get("#{BASE_URL}/#{path}")
   end
 
   def request

@@ -172,3 +172,14 @@ account = Smartsend::Account.new(
 
 order.save!(account: account)
 ```
+
+### Validating account
+```ruby
+account = Smartsend::Account.new(
+  email: 'wrong-username',
+  license: 'wrong-license-key'
+)
+
+account.valid?
+  => false
+```
