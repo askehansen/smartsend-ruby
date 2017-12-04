@@ -9,7 +9,7 @@ class Smartsend::Orders
   def save_all!(account: nil)
     raise Smartsend::TooManyOrdersError, "You can save a maximum of 10 orders in batch" if count > 10
 
-    response = Smartsend::Client.new(account).post('orders', self.serialize)
+    response = Smartsend::Client.new(account).post('booking/orders', self.serialize)
 
     update_label_url_tracking_codes(response)
 
@@ -18,7 +18,7 @@ class Smartsend::Orders
 
   def update_label_url_tracking_codes(response)
     @labels_url = response['combine_pdf']
-    
+
     response['orders'].each do |response_order|
       if order = @orders.select { |x| x.id.to_s == response_order['reference'].to_s }.first
         order.update_label_url_tracking_codes(response_order)
