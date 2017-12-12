@@ -15,10 +15,10 @@ gem install 'smartsend-ruby'
 
 ```ruby
 Smartsend.configure(
-  api_key: 'smartsend-api-key',
-  email: 'smartsend-username',
-  license: 'smartsend-license-key',
-  cms_system: 'Ruby on Rails',
+  api_key: 'smart-send-api-key',
+  email: 'smart-send-username',
+  license: 'smart-send-license-key',
+  cms_system: 'Ruby',
   cms_version: '5.0.0'
 )
 ```
