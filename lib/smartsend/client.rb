@@ -29,24 +29,27 @@ class Smartsend::Client
 
     Rails.logger.debug(response.to_s) if defined?(Rails)
 
-    case response.code.to_s
-    when '200'
-      Response.new(JSON.parse(response)).successful!
-    when '401'
+    case response.code
+    when (200..299)
+      Response.new(JSON.parse(response)).successful!(response.code)
+    when 401
       raise Smartsend::AuthorizationError, 'Unable to authorize'
     else
-      Response.new(response).failed!
+      Response.new(response).failed!(response.code)
     end
   end
 
   class Response < SimpleDelegator
+    attr_reader :http_code
 
-    def successful!
+    def successful!(http_code)
+      @http_code = http_code
       @success = true
       self
     end
 
-    def failed!
+    def failed!(http_code)
+      @http_code = http_code
       @success = false
       self
     end

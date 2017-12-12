@@ -1,6 +1,6 @@
 class Smartsend::Orders
   include Enumerable
-  attr_accessor :labels_url
+  attr_accessor :labels_url, :status_code, :pacsoft_link
 
   def initialize(*orders)
     @orders = orders
@@ -11,15 +11,20 @@ class Smartsend::Orders
 
     response = Smartsend::Client.new(account).post('booking/orders', self.serialize)
 
-    update_label_url_tracking_codes(response)
-
-    self
+    @status_code = response.http_code
+    if response.success?
+      update_label_url_tracking_codes(response)
+      self
+    else
+      false
+    end
   end
 
   def update_label_url_tracking_codes(response)
     @labels_url = response['combine_pdf']
+    @pacsoft_link = response['combine_link']
 
-    response['orders'].each do |response_order|
+    response['orders'].to_a.each do |response_order|
       if order = @orders.select { |x| x.id.to_s == response_order['reference'].to_s }.first
         order.update_label_url_tracking_codes(response_order)
       end

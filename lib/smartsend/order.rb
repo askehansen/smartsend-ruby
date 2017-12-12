@@ -1,6 +1,6 @@
 class Smartsend::Order
   attr_accessor :id, :label_url, :order_number, :carrier, :method, :return, :total_price, :shipping_price, :currency,
-    :sender, :receiver, :agent, :parcels, :sms_notification, :email_notification
+    :sender, :receiver, :agent, :parcels, :sms_notification, :email_notification, :status_code, :pacsoft_link
 
   def initialize(args={})
     args.each do |k, v|
@@ -17,14 +17,17 @@ class Smartsend::Order
       update_label_url_tracking_codes(response)
       self
     else
-      response
+      @status_code = response.http_code
+      false
     end
   end
 
   def update_label_url_tracking_codes(response)
+    @status_code = response['status']
     @label_url = response['pdflink']
+    @pacsoft_link = response['link']
 
-    response['parcels'].each do |parcel_response|
+    response['parcels'].to_a.each do |parcel_response|
       if parcel = @parcels.select { |x| x.reference.to_s == parcel_response['reference'].to_s }.first
         parcel.tracking_code = parcel_response['tracecode']
         parcel.tracking_url = parcel_response['tracelink']
