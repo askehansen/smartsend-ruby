@@ -21,13 +21,18 @@ class Smartsend::Orders
   end
 
   def update_label_url_tracking_codes(response)
-    @labels_url = response['combine_pdf']
-    @pacsoft_link = response['combine_link']
-
     response['orders'].to_a.each do |response_order|
       if order = @orders.select { |x| x.id.to_s == response_order['reference'].to_s }.first
         order.update_label_url_tracking_codes(response_order)
       end
+    end
+
+    @pacsoft_link = response['combine_link']
+
+    @labels_url = if @orders.one?
+      @orders.first.label_url
+    else
+      response['combine_pdf']
     end
   end
 
