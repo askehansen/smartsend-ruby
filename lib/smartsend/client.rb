@@ -2,7 +2,7 @@ require 'http'
 
 class Smartsend::Client
 
-  BASE_URL = 'http://smartsend-prod.apigee.net/v7'.freeze
+
 
   def initialize(account=nil)
     @account = account || Smartsend.account
@@ -10,32 +10,32 @@ class Smartsend::Client
 
   def post(path, params)
     request do
-      http.post("#{BASE_URL}/#{path}", json: params)
+      http.post(url(path), json: params)
     end
   end
 
   def get(path)
     request do
-      http.get("#{BASE_URL}/#{path}")
+      http.get(url(path))
     end
   end
 
   def get_plain(path)
-    http.get("#{BASE_URL}/#{path}")
+    http.get(url(path))
   end
 
   def request
     response = yield
-
-    Rails.logger.debug(response.to_s) if defined?(Rails)
 
     case response.code
     when (200..299)
       Response.new(JSON.parse(response)).successful!(response.code)
     when 401
       raise Smartsend::AuthorizationError, 'Unable to authorize'
+    when 404
+      raise Smartsend::NotFoundError, 'Resource not found'
     else
-      Response.new(response).failed!(response.code)
+      Response.new(JSON.parse(response)).failed!(response.code)
     end
   end
 
@@ -66,19 +66,21 @@ class Smartsend::Client
 
   private
 
-  def http
-    raise Smartsend::MissingConfigError, 'Missing api_key' if Smartsend.api_key.nil?
-    raise Smartsend::MissingConfigError, 'Missing email'   if @account.email.nil?
-    raise Smartsend::MissingConfigError, 'Missing license' if @account.license.nil?
+  BASE_URL = 'https://dumbledore.smartsend.io/api/v1'.freeze
+  # BASE_URL = 'https://dumbledore-smartsend-io-pni3xjp2uc43.eu2.runscope.net/api/v1'.freeze
 
-    HTTP.headers(
-      apikey: Smartsend.api_key,
-      smartsendmail: @account.email,
-      smartsendlicence: @account.license,
-      cmssystem: Smartsend.cms_system,
-      cmsversion: Smartsend.cms_version,
-      appversion: Smartsend.app_version,
-      test: Smartsend.test?
+  def url(path)
+    # return 'https://requestb.in/vo9ypyvo'
+    "#{BASE_URL}/#{path}"
+  end
+
+  def http
+    raise Smartsend::MissingConfigError, 'Missing api_token' if @account.api_token.nil?
+
+    HTTP.headers({
+      accept: 'application/json',
+      api_token: @account.api_token
+    }
     )
   end
 

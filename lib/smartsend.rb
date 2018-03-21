@@ -1,11 +1,6 @@
 module Smartsend
 
-  @@api_key = nil
-  @@email = nil
-  @@license = nil
-  @@cms_system = nil
-  @@cms_version = nil
-  @@test_mode = false
+  @@api_token = nil
 
   def self.configure(args={})
     args.each do |k, v|
@@ -14,43 +9,11 @@ module Smartsend
   end
 
   def self.account
-    Smartsend::Account.new(email: @@email, license: @@license)
+    Smartsend::Account.new(api_token: @@api_token)
   end
 
-  def self.api_key
-    @@api_key
-  end
-
-  def self.email
-    @@email
-  end
-
-  def self.license
-    @@license
-  end
-
-  def self.cms_system
-    @@cms_system
-  end
-
-  def self.cms_version
-    @@cms_version
-  end
-
-  def self.app_version
-    Smartsend::VERSION
-  end
-
-  def self.test_mode
-    @@test_mode
-  end
-
-  def self.test?
-    test_mode
-  end
-
-
-  class TooManyOrdersError < StandardError
+  def self.api_token
+    @@api_token
   end
 
   class MissingConfigError < StandardError
@@ -59,17 +22,23 @@ module Smartsend
   class AuthorizationError < StandardError
   end
 
+  class UnknownError < StandardError
+  end
+
+  class NotFoundError < StandardError
+  end
+
 end
 
-require_relative 'smartsend/order'
-require_relative 'smartsend/orders'
+require_relative 'smartsend/shipment'
 require_relative 'smartsend/address'
 require_relative 'smartsend/receiver'
 require_relative 'smartsend/sender'
 require_relative 'smartsend/agent'
-require_relative 'smartsend/service'
+require_relative 'smartsend/services'
 require_relative 'smartsend/parcel'
 require_relative 'smartsend/parcel_item'
 require_relative 'smartsend/client'
 require_relative 'smartsend/account'
 require_relative 'smartsend/version'
+require_relative 'smartsend/validation_error'

@@ -1,18 +1,12 @@
 class Smartsend::Account
-  attr_accessor :email, :license
+  attr_accessor :api_token
 
-  def initialize(email:, license:)
-    @email = email
-    @license = license
+  def initialize(api_token:)
+    @api_token = api_token
   end
 
   def valid?
-    begin
-      response = Smartsend::Client.new(self).get_plain('verify_user')
-      response.code.to_s == '200'
-    rescue Smartsend::AuthorizationError => e
-      false
-    end
+    raise NotImplementedError
   end
 
 end
