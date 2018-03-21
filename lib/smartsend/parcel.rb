@@ -2,7 +2,8 @@ class Smartsend::Parcel
   attr_accessor :internal_id, :internal_reference, :weight, :height, :width,
                 :length, :freetext1, :freetext2, :freetext3,
                 :total_price_excluding_tax, :total_price_including_tax,
-                :total_tax_amount, :items
+                :total_tax_amount, :items, :label_url, :tracking_code,
+                :tracking_link
 
   def initialize(args={})
     args.each do |k, v|

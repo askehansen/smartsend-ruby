@@ -82,6 +82,19 @@ class ShipmentTest < Minitest::Test
       freetext3: "We look forward to seeing you soon Brian",
     )
 
+    # add one or more parcels/fulfillments to the shipment
+    parcel2 = Smartsend::Parcel.new(
+      internal_id: "123456789b", # your internal parcel id
+      internal_reference: "123456789b",
+      weight: 1.25,
+      height: 21,
+      width: 27,
+      length: 35,
+      freetext1: "Brians birthday gift",
+      freetext2: "Don't open this before your birthday Brian",
+      freetext3: "We look forward to seeing you soon Brian",
+    )
+
     # add items to the parcel
     parcel_item = Smartsend::ParcelItem.new(
       internal_id: "ABC123",
@@ -93,13 +106,23 @@ class ShipmentTest < Minitest::Test
     )
 
     parcel.items << parcel_item
+    parcel2.items << parcel_item
     shipment.parcels << parcel
+    shipment.parcels << parcel2
 
     # send the shipment to Smartsend.io
     shipment.save!
 
     assert shipment.success?
-    assert shipment.label_url
+
+    assert shipment.parcels[0].label_url
+    assert shipment.parcels[1].label_url
+
+    assert shipment.parcels[0].tracking_code
+    assert shipment.parcels[1].tracking_code
+
+    assert shipment.parcels[0].tracking_link
+    assert shipment.parcels[1].tracking_link
   end
 
   def test_invalid_request

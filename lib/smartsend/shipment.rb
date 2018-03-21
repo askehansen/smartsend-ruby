@@ -5,7 +5,7 @@ class Smartsend::Shipment
                 :sub_total_price_including_tax, :shipping_price_excluding_tax,
                 :shipping_price_including_tax, :total_price_excluding_tax,
                 :total_price_including_tax, :total_tax_amount, :currency,
-                :success, :label_url, :error
+                :success, :error, :labels_url
 
   def initialize(args={})
     args.each do |k, v|
@@ -24,7 +24,18 @@ class Smartsend::Shipment
 
     if response.success?
       @success = true
-      @label_url = response.dig('data', 'pdf', 'link')
+      @labels_url = response.dig('data', 'pdf', 'link')
+
+      response['data']['parcels'].each do |parcel_response|
+        parcel = parcels.find do |item|
+          item.internal_id == parcel_response['parcel_internal_id']
+        end
+
+        parcel&.label_url = parcel_response.dig('pdf', 'link')
+        parcel&.tracking_code = parcel_response['tracking_code']
+        parcel&.tracking_link = parcel_response['tracking_link']
+
+      end
     else
       self.error = Smartsend::RequestError.build(response)
     end

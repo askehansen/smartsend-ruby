@@ -1,4 +1,5 @@
 require 'http'
+require 'logger'
 
 class Smartsend::Client
 
