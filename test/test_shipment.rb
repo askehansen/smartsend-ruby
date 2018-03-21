@@ -14,7 +14,12 @@ class ShipmentTest < Minitest::Test
       internal_reference: "AC12345789", # your order number
       shipping_carrier: "postnord", # postnord/gls/bring/dao
       shipping_method: "agent",
-      shipping_date: Date.today.strftime('%Y-%m-%d')
+      shipping_date: Date.today.strftime('%Y-%m-%d'),
+      currency: "DKK"
+    )
+
+    shipment.services = Smartsend::Services.new(
+      email_notification: 'contact@smartsend.io'
     )
 
     # set the receiver of the shipment
@@ -49,20 +54,20 @@ class ShipmentTest < Minitest::Test
       email: "contact@smartsend.io"
     )
 
-    # optionally ship to a droppoint by setting an agent
-    shipment.agent = Smartsend::Agent.new(
-      internal_id: "123456",
-      internal_reference: "123457",
-      agent_no: "2103", # droppoint id
-      company: "Smart Send",
-      name_line1: "Henrik Hansen",
-      name_line2: "C/O Vivian Hansen",
-      address_line1: "Willemoesgade 42",
-      address_line2: "3.th.",
-      postal_code: "2100",
-      city: "Copenhagen",
-      country: "DK"
-    )
+    # # optionally ship to a droppoint by setting an agent
+    # shipment.agent = Smartsend::Agent.new(
+    #   internal_id: "123456",
+    #   internal_reference: "123457",
+    #   agent_no: "2103", # droppoint id
+    #   company: "Smart Send",
+    #   name_line1: "Henrik Hansen",
+    #   name_line2: "C/O Vivian Hansen",
+    #   address_line1: "Willemoesgade 42",
+    #   address_line2: "3.th.",
+    #   postal_code: "2100",
+    #   city: "Copenhagen",
+    #   country: "DK"
+    # )
 
     # add one or more parcels/fulfillments to the shipment
     parcel = Smartsend::Parcel.new(
@@ -188,8 +193,7 @@ class ShipmentTest < Minitest::Test
     shipment.save!
 
     assert !shipment.success?
-    assert_equal 5, shipment.error.fields.count
-
+    assert_equal 5, shipment.error.errors.count
   end
 
 end

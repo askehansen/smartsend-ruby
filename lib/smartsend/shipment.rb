@@ -24,11 +24,9 @@ class Smartsend::Shipment
 
     if response.success?
       @success = true
-      @label_url = response['data']['pdf']['link']
-    elsif response['code'] == 'ValidationException'
-      self.error = Smartsend::ValidationError.build(response)
+      @label_url = response.dig('data', 'pdf', 'link')
     else
-      raise Smartsend::UnknownError.new(response)
+      self.error = Smartsend::RequestError.build(response)
     end
   end
 

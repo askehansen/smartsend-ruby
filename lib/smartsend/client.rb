@@ -2,8 +2,6 @@ require 'http'
 
 class Smartsend::Client
 
-
-
   def initialize(account=nil)
     @account = account || Smartsend.account
   end
@@ -26,6 +24,9 @@ class Smartsend::Client
 
   def request
     response = yield
+
+    logger.debug(response)
+    logger.debug(response.body.to_s)
 
     case response.code
     when (200..299)
@@ -66,12 +67,14 @@ class Smartsend::Client
 
   private
 
-  BASE_URL = 'https://dumbledore.smartsend.io/api/v1'.freeze
-  # BASE_URL = 'https://dumbledore-smartsend-io-pni3xjp2uc43.eu2.runscope.net/api/v1'.freeze
+  BASE_URL = 'http://smartsend-test.apigee.net/api/v1'.freeze
 
   def url(path)
-    # return 'https://requestb.in/vo9ypyvo'
     "#{BASE_URL}/#{path}"
+  end
+
+  def logger
+    Logger.new($stdout)
   end
 
   def http
@@ -80,8 +83,7 @@ class Smartsend::Client
     HTTP.headers({
       accept: 'application/json',
       api_token: @account.api_token
-    }
-    )
+    })
   end
 
 end
