@@ -111,7 +111,7 @@ class ShipmentTest < Minitest::Test
     shipment.parcels << parcel2
 
     # send the shipment to Smartsend.io
-    shipment.save!
+    shipment.save_and_create_label!
 
     assert shipment.success?
 
@@ -213,7 +213,7 @@ class ShipmentTest < Minitest::Test
     shipment.parcels << parcel
 
     # send the shipment to Smartsend.io
-    shipment.save!
+    shipment.save_and_create_label!
 
     assert !shipment.success?
     assert_equal 5, shipment.error.errors.count

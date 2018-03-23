@@ -19,7 +19,7 @@ class Smartsend::Shipment
     success
   end
 
-  def save!(account: nil)
+  def save_and_create_label!(account: nil)
     response = Smartsend::Client.new(account).post('shipments/labels', self.serialize)
 
     if response.success?
