@@ -71,7 +71,7 @@ class Smartsend::Client
   BASE_URL = 'http://smartsend-test.apigee.net/api/v1'.freeze
 
   def url(path)
-    "#{BASE_URL}/#{path}"
+    "#{BASE_URL}/#{path}?api_token=#{@account.api_token}"
   end
 
   def logger
@@ -82,8 +82,7 @@ class Smartsend::Client
     raise Smartsend::MissingConfigError, 'Missing api_token' if @account.api_token.nil?
 
     HTTP.headers({
-      accept: 'application/json',
-      api_token: @account.api_token
+      accept: 'application/json'
     })
   end
 
