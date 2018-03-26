@@ -82,7 +82,9 @@ class Smartsend::Client
     raise Smartsend::MissingConfigError, 'Missing api_token' if @account.api_token.nil?
 
     HTTP.headers({
-      accept: 'application/json'
+      accept: 'application/json',
+      user_agent: "Shopify/#{Smartsend::VERSION}",
+      referer: @account.referer
     })
   end
 
