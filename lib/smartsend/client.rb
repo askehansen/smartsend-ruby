@@ -78,12 +78,16 @@ class Smartsend::Client
     Logger.new($stdout)
   end
 
+  def user_agent_string
+    (["Ruby/#{Smartsend::VERSION}"] + @account.user_agents.to_a).join(' ')
+  end
+
   def http
     raise Smartsend::MissingConfigError, 'Missing api_token' if @account.api_token.nil?
 
     HTTP.headers({
       accept: 'application/json',
-      user_agent: "Shopify/#{Smartsend::VERSION}",
+      user_agent: user_agent_string,
       referer: @account.referer
     })
   end
