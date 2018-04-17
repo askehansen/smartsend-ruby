@@ -8,7 +8,11 @@ class Smartsend::Account
   end
 
   def valid?
-    raise NotImplementedError
+    begin
+      !!Smartsend::Client.new(self).get('user')
+    rescue Smartsend::AuthorizationError
+      false
+    end
   end
 
 end

@@ -6,7 +6,7 @@ class ShipmentTest < Minitest::Test
 
   def test_successful_label
     Smartsend.configure(
-      api_token: 'test_token',
+      api_token: ENV['SMARTSEND_TOKEN'],
     )
 
     shipment = Smartsend::Shipment.new(
@@ -127,7 +127,7 @@ class ShipmentTest < Minitest::Test
 
   def test_invalid_request
     Smartsend.configure(
-      api_token: 'test_token',
+      api_token: ENV['SMARTSEND_TOKEN'],
     )
 
     shipment = Smartsend::Shipment.new(
