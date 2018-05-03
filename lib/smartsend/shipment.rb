@@ -1,8 +1,8 @@
 class Smartsend::Shipment
   attr_accessor :internal_id, :internal_reference, :shipping_carrier,
                 :shipping_method, :shipping_date, :sender, :receiver, :agent,
-                :parcels, :services, :sub_total_price_excluding_tax,
-                :sub_total_price_including_tax, :shipping_price_excluding_tax,
+                :parcels, :services, :subtotal_price_excluding_tax,
+                :subtotal_price_including_tax, :shipping_price_excluding_tax,
                 :shipping_price_including_tax, :total_price_excluding_tax,
                 :total_price_including_tax, :total_tax_amount, :currency,
                 :success, :error, :labels_url
@@ -53,8 +53,8 @@ class Smartsend::Shipment
       :agent                         => agent&.serialize,
       :parcels                       => parcels.map(&:serialize),
       :services                      => services&.serialize,
-      :sub_total_price_excluding_tax => sub_total_price_excluding_tax,
-      :sub_total_price_including_tax => sub_total_price_including_tax,
+      :subtotal_price_excluding_tax  => subtotal_price_excluding_tax,
+      :subtotal_price_including_tax  => subtotal_price_including_tax,
       :shipping_price_excluding_tax  => shipping_price_excluding_tax,
       :shipping_price_including_tax  => shipping_price_including_tax,
       :total_price_excluding_tax     => total_price_excluding_tax,

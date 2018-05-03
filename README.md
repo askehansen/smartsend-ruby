@@ -150,3 +150,8 @@ account = Smartsend::Account.new(
 account.valid?
   => false
 ```
+
+## Changelog
+
+### [0.4.2] - 2018-05-03
+* Changed `sub_total` to `subtotal`
