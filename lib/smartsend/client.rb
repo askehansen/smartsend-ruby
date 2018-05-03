@@ -68,7 +68,7 @@ class Smartsend::Client
 
   private
 
-  BASE_URL = 'http://smartsend-test.apigee.net/api/v1'.freeze
+  BASE_URL = 'http://smartsend-prod.apigee.net/api/v1'.freeze
 
   def url(path)
     "#{BASE_URL}/#{path}?api_token=#{@account.api_token}"

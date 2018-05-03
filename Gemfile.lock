@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    smartsend-ruby (0.3)
+    smartsend-ruby (0.4.2)
       http (~> 2.2)
 
 GEM
@@ -9,7 +9,7 @@ GEM
   specs:
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
-    domain_name (0.5.20170404)
+    domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
     http (2.2.2)
       addressable (~> 2.3)

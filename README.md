@@ -153,5 +153,8 @@ account.valid?
 
 ## Changelog
 
+### [0.4.3] - 2018-05-03
+* Using prod url
+
 ### [0.4.2] - 2018-05-03
 * Changed `sub_total` to `subtotal`
