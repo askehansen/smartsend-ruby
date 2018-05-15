@@ -153,6 +153,9 @@ account.valid?
 
 ## Changelog
 
+### [0.5.0] - 2018-05-15
+* Find label by tracking_code
+
 ### [0.4.3] - 2018-05-03
 * Using prod url
 
