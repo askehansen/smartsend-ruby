@@ -2,15 +2,21 @@ require 'http'
 require 'logger'
 
 class Smartsend::Client
+  @@logging = false
 
-  def initialize(account=nil, debug: false)
+  def self.with_logs
+    @@logging = true
+    yield
+    @@logging = false
+  end
+
+  def initialize(account=nil)
     @account = account || Smartsend.account
-    @debug = debug
   end
 
   def post(path, params)
-    debug("POST #{path}")
-    debug(params)
+    log("POST #{path}")
+    log(params)
 
     request do
       http.post(url(path), json: params)
@@ -18,7 +24,7 @@ class Smartsend::Client
   end
 
   def get(path)
-    debug("GET #{path}")
+    log("GET #{path}")
 
     request do
       http.get(url(path))
@@ -32,8 +38,8 @@ class Smartsend::Client
   def request
     response = yield
 
-    debug(response)
-    debug(response.body.to_s)
+    log(response)
+    log(response.body.to_s)
 
     case response.code
     when (200..299)
@@ -74,8 +80,8 @@ class Smartsend::Client
 
   private
 
-  def debug(value)
-    Logger.new($stdout).debug(value) if @debug
+  def log(value)
+    Logger.new($stdout).log(value) if @@logging
   end
 
   BASE_URL = 'http://smartsend-prod.apigee.net/api/v1'.freeze
