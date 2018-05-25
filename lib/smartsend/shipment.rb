@@ -28,7 +28,7 @@ class Smartsend::Shipment
 
       response['data']['parcels'].each do |parcel_response|
         parcel = parcels.find do |item|
-          item.internal_id == parcel_response['parcel_internal_id']
+          item.internal_id.to_s == parcel_response['parcel_internal_id'].to_s
         end
 
         parcel&.label_url = parcel_response.dig('pdf', 'link')

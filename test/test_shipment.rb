@@ -71,7 +71,7 @@ class ShipmentTest < Minitest::Test
 
     # add one or more parcels/fulfillments to the shipment
     parcel = Smartsend::Parcel.new(
-      internal_id: "123456789", # your internal parcel id
+      internal_id: 123456789, # your internal parcel id
       internal_reference: "123456789",
       weight: 1.25,
       height: 21,
