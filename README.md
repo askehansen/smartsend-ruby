@@ -153,6 +153,10 @@ account.valid?
 
 ## Changelog
 
+### [0.5.1] - 2018-05-25
+* Compare parcel ids as string
+* Abillity to log requests
+
 ### [0.5.0] - 2018-05-15
 * Find label by tracking_code
 
